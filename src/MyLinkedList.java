@@ -33,7 +33,7 @@ public class MyLinkedList<T extends Comparable<T>> {
 	
 	public MyLinkedList(){
 		size = 0;
-		head = null;
+		head = new LLNode<T>(null);
 	}
 	public boolean isEmpty(){
 		return (size==0);
