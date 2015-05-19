@@ -61,10 +61,15 @@ public class MyAVLTree{
 		root = null;
 	}
 	public void insert(inputQuery obj){
-		root = insertItem(obj, root, (retrieve(obj.getStr())==null));
+		MyLinkedList<Integer> record = new MyLinkedList<Integer>();
+		root = insertItem(obj, root, record);
+		if(retrieve(obj.getStr())==null){
+			fixHeight(record);
+		}
+		
 		rotation();
 	}
-	private AVLNode insertItem(inputQuery obj, AVLNode aNode, boolean efInsert){
+	private AVLNode insertItem(inputQuery obj, AVLNode aNode, MyLinkedList<Integer> record){
 		if(aNode==null){
 			aNode = new AVLNode(obj.getStr());
 			aNode.getList().add(obj.getCoord());
@@ -73,15 +78,12 @@ public class MyAVLTree{
 			aNode.getList().add(obj.getCoord());
 		}
 		else if(aNode.compareTo(obj)>0){
-			if(efInsert==true)
-				aNode.leftHeight+=1;
-			
-			aNode.setLeft(insertItem(obj, aNode.getLeft(), efInsert));
+			record.insert(0);
+			aNode.setLeft(insertItem(obj, aNode.getLeft(), record));
 		}
 		else{
-			if(efInsert==true)
-				aNode.rightHeight+=1;
-			aNode.setRight(insertItem(obj, aNode.getRight(), efInsert));
+			record.insert(1);
+			aNode.setRight(insertItem(obj, aNode.getRight(), record));
 		}
 		return aNode;
 		
@@ -106,6 +108,27 @@ public class MyAVLTree{
 		}
 	}
 	
+	private void fixHeight(MyLinkedList<Integer> record){
+		AVLNode currentNode = root;
+		LLNode<Integer> currentLLNode = record.getHead().getNext();
+		for(int i = 0 ; i < record.size(); i++){
+			if(currentLLNode.getItem()==0){
+				if(record.size()-i>currentNode.leftHeight){
+					currentNode.leftHeight=record.size()-i;
+				}
+			}
+			else{
+				if(record.size()-i>currentNode.rightHeight){
+					currentNode.rightHeight=record.size()-i;
+				}
+			}
+			
+			currentNode = (currentLLNode.getItem()==0)?currentNode.getLeft() : currentNode.getRight();
+			currentLLNode.getNext();
+			
+		}
+	}
+	
 	public void delete(){
 		
 	}
@@ -118,5 +141,7 @@ public class MyAVLTree{
 	
 		}
 	}
+	
+	
 
 }
