@@ -32,12 +32,32 @@ class AVLNode implements Comparable<AVLNode>{
 	public AVLNode getRight(){
 		return rChild;
 	}
+	public AVLNode get(int direction){
+		if (direction%2 ==0)
+			return getLeft();
+		else
+			return getRight();
+	}
 	public void setLeft(AVLNode obj){
 		lChild = obj;
 	}
 	public void setRight(AVLNode obj){
 		rChild = obj;
 	}
+	public void set(int dir, AVLNode obj){
+		if(dir%2==0)
+			setLeft(obj);
+		else
+			setRight(obj);
+	}
+	public int heightOf(int dir){
+		if(dir%2==0)
+			return leftHeight;
+		else
+			return rightHeight;
+	}
+	
+	
 	@Override
 	public int compareTo(AVLNode obj){
 		return this.str.compareTo(obj.str);
@@ -47,10 +67,14 @@ class AVLNode implements Comparable<AVLNode>{
 		return this.str.compareTo(obj.getStr());
 		
 	}
-	
-	
+		
 }
+
+
 public class MyAVLTree{
+	final int LEFT = 0;
+	final int RIGHT = 1;
+	
 	private AVLNode root;
 	
 	public AVLNode getRoot(){
@@ -66,10 +90,64 @@ public class MyAVLTree{
 		root = insertItem(obj, root, record);
 		if(efInsert){
 			fixHeight(record);
+			rebalance(record);
 		}
 		
-		rotation();
+		
 	}
+	
+	private void rebalance(MyLinkedList<Integer> record){
+		AVLNode curNode = root;
+		LLNode<Integer> curLLNode = record.getHead().getNext();
+		boolean needTrack = false;  //do we need to rebalance?
+		for(int i = 0 ; i < record.size(); i++){
+			if(needBalance(curNode)){
+				needTrack = true;
+				break;
+			}
+			curNode = curNode.get(curLLNode.getItem());
+			curLLNode = curLLNode.getNext();
+		}
+		
+		if(needTrack == false) // if we don't need to rebalance
+			return;
+		//if we need to rotate root
+		if(curNode==root&&!needBalance(curNode.get(curLLNode.getItem()))&&needBalance(root)){
+			if(needDbRotation(root, curLLNode.getItem()))
+				root.set(curLLNode.getItem(), rotation(root.get(curLLNode.getItem()), curLLNode.getItem()));
+			root = rotation(root, curLLNode.getItem()+1);
+			return;
+		}
+		//else
+		while(true){
+			int dir = curLLNode.getItem();
+			int nextDir = curLLNode.getNext().getItem();
+			if(needBalance(curNode.get(dir).get(nextDir))){
+				curNode = curNode.get(dir);
+				curLLNode = curLLNode.getNext();
+				continue;
+			}
+			else{
+				if(needDbRotation(curNode.get(dir), nextDir))
+					curNode.get(dir).set(nextDir, rotation(curNode.get(dir).get(nextDir), nextDir));
+				curNode.set(dir, rotation(curNode.get(dir), dir));
+			}			
+		}
+	}
+	
+	
+	
+	private boolean needDbRotation(AVLNode aNode2, int dir){
+		AVLNode rootNode = aNode2.get(dir);
+		if(rootNode.heightOf(dir)<rootNode.heightOf(dir+1))
+			return true;
+		return false;
+		
+	}
+	private boolean needBalance(AVLNode aNode){
+		return ((aNode.leftHeight-aNode.rightHeight)==2||(aNode.rightHeight-aNode.leftHeight)==2);
+	}
+	
 	private AVLNode insertItem(inputQuery obj, AVLNode aNode, MyLinkedList<Integer> record){
 		if(aNode==null){
 			aNode = new AVLNode(obj.getStr());
@@ -79,19 +157,25 @@ public class MyAVLTree{
 			aNode.getList().add(obj.getCoord());
 		}
 		else if(aNode.compareTo(obj)>0){
-			record.insertBack(0);
+			record.insertBack(LEFT);
 			aNode.setLeft(insertItem(obj, aNode.getLeft(), record));
 		}
 		else{
-			record.insertBack(1);
+			record.insertBack(RIGHT);
 			aNode.setRight(insertItem(obj, aNode.getRight(), record));
 		}
 		return aNode;
 		
 	}
 	
-	private void rotation(){
+	private AVLNode rotation(AVLNode aNode, int dir){
+		AVLNode newRoot;
+		newRoot = aNode.get(dir+1);
+		AVLNode temp = newRoot.get(dir);
+		newRoot.set(dir,aNode);
+		aNode.set(dir+1, temp);
 		
+		return newRoot;		
 	}
 	
 	public AVLNode retrieve(String key){
@@ -113,7 +197,7 @@ public class MyAVLTree{
 		AVLNode currentNode = root;
 		LLNode<Integer> currentLLNode = record.getHead().getNext();
 		for(int i = 0 ; i < record.size(); i++){
-			if(currentLLNode.getItem()==0){
+			if(currentLLNode.getItem()==LEFT){
 				if(record.size()-i>currentNode.leftHeight){
 					currentNode.leftHeight=record.size()-i;
 				}
@@ -124,7 +208,7 @@ public class MyAVLTree{
 				}
 			}
 			
-			currentNode = (currentLLNode.getItem()==0)?currentNode.getLeft() : currentNode.getRight();
+			currentNode = (currentLLNode.getItem()==LEFT)?currentNode.getLeft() : currentNode.getRight();
 			currentLLNode=currentLLNode.getNext();
 			
 		}
