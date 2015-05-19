@@ -62,8 +62,9 @@ public class MyAVLTree{
 	}
 	public void insert(inputQuery obj){
 		MyLinkedList<Integer> record = new MyLinkedList<Integer>();
+		boolean efInsert = (retrieve(obj.getStr())==null);
 		root = insertItem(obj, root, record);
-		if(retrieve(obj.getStr())==null){
+		if(efInsert){
 			fixHeight(record);
 		}
 		
@@ -78,11 +79,11 @@ public class MyAVLTree{
 			aNode.getList().add(obj.getCoord());
 		}
 		else if(aNode.compareTo(obj)>0){
-			record.insert(0);
+			record.insertBack(0);
 			aNode.setLeft(insertItem(obj, aNode.getLeft(), record));
 		}
 		else{
-			record.insert(1);
+			record.insertBack(1);
 			aNode.setRight(insertItem(obj, aNode.getRight(), record));
 		}
 		return aNode;
@@ -124,7 +125,7 @@ public class MyAVLTree{
 			}
 			
 			currentNode = (currentLLNode.getItem()==0)?currentNode.getLeft() : currentNode.getRight();
-			currentLLNode.getNext();
+			currentLLNode=currentLLNode.getNext();
 			
 		}
 	}

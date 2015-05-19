@@ -43,7 +43,9 @@ public class MyLinkedList<T extends Comparable<T>> implements Iterable<T>{
 	
 	public MyLinkedList(){
 		size = 0;
-		head = new LLNode<T>(null, head, head);
+		head = new LLNode<T>(null);
+		head.setNext(head);
+		head.setPrev(head);
 	}
 	
 	public Iterator<T> iterator() {
@@ -65,9 +67,10 @@ public class MyLinkedList<T extends Comparable<T>> implements Iterable<T>{
 	public void delete(T obj){
 		
 	}
-	public void insert(T obj){
+	public void insertBack(T obj){
 		LLNode<T> cur = head.getPrev();
 		cur.setNext(new LLNode<T>(obj, cur, head));
+		head.setPrev(cur.getNext());
 		size++;
 		
 	}

@@ -21,6 +21,7 @@ public class test {
 		System.out.println(a.getRoot().leftHeight);
 		
 		System.out.println(a.getRoot().rightHeight);
+		
 	}
 
 }
