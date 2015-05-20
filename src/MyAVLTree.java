@@ -100,7 +100,6 @@ public class MyAVLTree{
 		boolean efInsert = (retrieve(obj.getStr())==null);
 		root = insertItem(obj, root, record);
 		if(efInsert){
-			//fixHeight(record);
 			rebalance(record.getFirst());
 		}
 		
@@ -112,7 +111,7 @@ public class MyAVLTree{
 			aNode = new AVLNode(obj.getStr());
 			aNode.getList().add(obj.getCoord());
 		}
-		else if(aNode.getStr()==obj.getStr()){
+		else if(aNode.getStr().equals(obj.getStr())){
 			aNode.getList().add(obj.getCoord());
 		}
 		else if(aNode.compareTo(obj)>0){
@@ -196,7 +195,7 @@ public class MyAVLTree{
 	private AVLNode retrieveItem(String key, AVLNode aNode){
 		if(aNode==null) return null;
 		else{
-			if(key==aNode.getStr()) return aNode;
+			if(key.equals(aNode.getStr())) return aNode;
 			else if(key.compareTo(aNode.getStr())>0)
 				return retrieveItem(key, aNode.getRight());
 			else
@@ -204,53 +203,16 @@ public class MyAVLTree{
 		}
 	}
 	
-	/*
-	private void fixH8(){
-		root.leftHeight = fixH8recur(root.getLeft());
-		root.rightHeight = fixH8recur(root.getRight());
-	}
-	private int fixH8recur(AVLNode aNode){
-		if(aNode==null)
-			return 0;
-		aNode.leftHeight = fixH8recur(aNode.getLeft())+1;
-		aNode.rightHeight = fixH8recur(aNode.getRight())+1;
-		return (aNode.leftHeight>aNode.rightHeight)? aNode.leftHeight:aNode.rightHeight;
-	}
-	
-	private void fixHeight(){
-		
-		
-		
-		
-		/*AVLNode currentNode = root;
-		LLNode<Integer> currentLLNode = record.getHead().getNext();
-		for(int i = 0 ; i < record.size(); i++){
-			if(currentLLNode.getItem()==LEFT){
-				if(record.size()-i>currentNode.leftHeight){
-					currentNode.leftHeight=record.size()-i;
-				}
-			}
-			else{
-				if(record.size()-i>currentNode.rightHeight){
-					currentNode.rightHeight=record.size()-i;
-				}
-			}
-			
-			currentNode = (currentLLNode.getItem()==LEFT)?currentNode.getLeft() : currentNode.getRight();
-			currentLLNode=currentLLNode.getNext();
-			
-		}
-	}*/
-	
 	public void delete(){
 		
 	}
 	
 	public void preorder(AVLNode aNode){
 		if(aNode!=null){
-			System.out.println(aNode.getStr());
+			System.out.print(aNode.getStr()+" ");
 			preorder(aNode.getLeft());
 			preorder(aNode.getRight());
+			
 	
 		}
 	}
