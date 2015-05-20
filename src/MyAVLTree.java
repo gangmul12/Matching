@@ -40,9 +40,11 @@ class AVLNode implements Comparable<AVLNode>{
 	}
 	public void setLeft(AVLNode obj){
 		lChild = obj;
+		
 	}
 	public void setRight(AVLNode obj){
 		rChild = obj;
+		
 	}
 	public void set(int dir, AVLNode obj){
 		if(dir%2==0)
@@ -89,8 +91,8 @@ public class MyAVLTree{
 		boolean efInsert = (retrieve(obj.getStr())==null);
 		root = insertItem(obj, root, record);
 		if(efInsert){
-			fixHeight(record);
-			rebalance(record);
+			fixH8();
+			//rebalance(record);
 		}
 		
 		
@@ -145,6 +147,8 @@ public class MyAVLTree{
 		
 	}
 	private boolean needBalance(AVLNode aNode){
+		if(aNode==null)
+			return false;
 		return ((aNode.leftHeight-aNode.rightHeight)==2||(aNode.rightHeight-aNode.leftHeight)==2);
 	}
 	
@@ -175,6 +179,8 @@ public class MyAVLTree{
 		newRoot.set(dir,aNode);
 		aNode.set(dir+1, temp);
 		
+		fixH8();
+		
 		return newRoot;		
 	}
 	
@@ -193,8 +199,25 @@ public class MyAVLTree{
 		}
 	}
 	
-	private void fixHeight(MyLinkedList<Integer> record){
-		AVLNode currentNode = root;
+	
+	private void fixH8(){
+		root.leftHeight = fixH8recur(root.getLeft());
+		root.rightHeight = fixH8recur(root.getRight());
+	}
+	private int fixH8recur(AVLNode aNode){
+		if(aNode==null)
+			return 0;
+		aNode.leftHeight = fixH8recur(aNode.getLeft())+1;
+		aNode.rightHeight = fixH8recur(aNode.getRight())+1;
+		return (aNode.leftHeight>aNode.rightHeight)? aNode.leftHeight:aNode.rightHeight;
+	}
+	
+	private void fixHeight(/*MyLinkedList<Integer> record*/){
+		
+		
+		
+		
+		/*AVLNode currentNode = root;
 		LLNode<Integer> currentLLNode = record.getHead().getNext();
 		for(int i = 0 ; i < record.size(); i++){
 			if(currentLLNode.getItem()==LEFT){
@@ -211,7 +234,7 @@ public class MyAVLTree{
 			currentNode = (currentLLNode.getItem()==LEFT)?currentNode.getLeft() : currentNode.getRight();
 			currentLLNode=currentLLNode.getNext();
 			
-		}
+		}*/
 	}
 	
 	public void delete(){
