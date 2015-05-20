@@ -27,6 +27,10 @@ public class MyHashTable {
 	}
 	
 	public void print(int idx){
+		if(table[idx]==null){
+			System.out.println("EMPTY");
+			return;
+		}
 		table[idx].preorderPrint();
 	}
 	

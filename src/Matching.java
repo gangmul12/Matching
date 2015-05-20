@@ -6,7 +6,7 @@ public class Matching
 	public static void main(String args[])
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		MyHashTable ht = new MyHashTable();
+		MyHashTable ht = null;
 
 		while (true)
 		{
@@ -16,7 +16,7 @@ public class Matching
 				if (input.compareTo("QUIT") == 0)
 					break;
 
-				command(input, ht);
+				ht=command(input, ht);
 			}
 			catch (IOException e)
 			{
@@ -25,11 +25,11 @@ public class Matching
 		}
 	}
 
-	private static void command(String input, MyHashTable ht) throws IOException
+	private static MyHashTable command(String input, MyHashTable ht) throws IOException
 	{
 		Commander cmd = new Commander(input);
-		cmd.work(ht);
-		
+		ht=cmd.work(ht);
+		return ht;
 	}
 	
 	

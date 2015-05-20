@@ -16,16 +16,13 @@ class AVLNode implements Comparable<AVLNode>{
 		leftHeight=rightHeight=0;
 	}
 	
-	
-	public String getStr(){
+		public String getStr(){
 		return str;
 	}
 	public MyLinkedList<coordinate> getList(){
 		return list;
 	}
-	
-
-	
+		
 	public AVLNode getLeft(){
 		return lChild;
 	}
@@ -66,8 +63,7 @@ class AVLNode implements Comparable<AVLNode>{
 		else
 			return rightHeight;
 	}
-	
-	
+		
 	@Override
 	public int compareTo(AVLNode obj){
 		return this.str.compareTo(obj.str);
