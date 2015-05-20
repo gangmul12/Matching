@@ -109,10 +109,10 @@ public class MyAVLTree{
 	private AVLNode insertItem(inputQuery obj, AVLNode aNode, MyLinkedList<Integer> record){
 		if(aNode==null){
 			aNode = new AVLNode(obj.getStr());
-			aNode.getList().add(obj.getCoord());
+			aNode.getList().insertBack(obj.getCoord());
 		}
 		else if(aNode.getStr().equals(obj.getStr())){
-			aNode.getList().add(obj.getCoord());
+			aNode.getList().insertBack(obj.getCoord());
 		}
 		else if(aNode.compareTo(obj)>0){
 			record.insertBack(LEFT);
@@ -207,14 +207,18 @@ public class MyAVLTree{
 		
 	}
 	
+	public void preorderPrint(){
+		preorder(root);
+	}
+	
 	public void preorder(AVLNode aNode){
 		if(aNode!=null){
 			System.out.print(aNode.getStr()+" ");
 			preorder(aNode.getLeft());
-			preorder(aNode.getRight());
-			
-	
+			preorder(aNode.getRight());	
 		}
+		if(aNode==root)
+			System.out.println();
 	}
 	
 	

@@ -2,9 +2,11 @@ import java.io.*;
 
 public class Matching
 {
+	
 	public static void main(String args[])
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		MyHashTable ht = new MyHashTable();
 
 		while (true)
 		{
@@ -14,7 +16,7 @@ public class Matching
 				if (input.compareTo("QUIT") == 0)
 					break;
 
-				command(input);
+				command(input, ht);
 			}
 			catch (IOException e)
 			{
@@ -23,9 +25,12 @@ public class Matching
 		}
 	}
 
-	private static void command(String input)
+	private static void command(String input, MyHashTable ht) throws IOException
 	{
-		// TODO : 아래 문장을 삭제하고 구현해라.
-		System.out.println("<< command 함수에서 " + input + " 명령을 처리할 예정입니다 >>");
+		Commander cmd = new Commander(input);
+		cmd.work(ht);
+		
 	}
+	
+	
 }

@@ -2,11 +2,11 @@
 public class MyHashTable {
 	public final int TABLE_SIZE = 100;
 	private MyAVLTree[] table;
-	private int size;
+	
 	
 	public MyHashTable(){
 		table = new MyAVLTree[TABLE_SIZE];
-		size=0;
+		
 	}
 	
 	private int indexCalculator(String input){
@@ -18,7 +18,17 @@ public class MyHashTable {
 	}
 	
 	public void add(inputQuery input){
+		int idx = indexCalculator(input.getStr());
+		if(table[idx]==null){
+			table[idx] = new MyAVLTree();
+		}
 		table[indexCalculator(input.getStr())].insert(input);
+		
 	}
+	
+	public void print(int idx){
+		table[idx].preorderPrint();
+	}
+	
 
 }
