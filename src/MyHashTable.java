@@ -9,7 +9,7 @@ public class MyHashTable {
 		
 	}
 	
-	private int indexCalculator(String input){
+	private int hashFunction(String input){
 		int result = 0;
 		for(int i = 0 ; i < input.length(); i++){
 			result += input.charAt(i);
@@ -18,11 +18,11 @@ public class MyHashTable {
 	}
 	
 	public void add(inputQuery input){
-		int idx = indexCalculator(input.getStr());
+		int idx = hashFunction(input.getStr());
 		if(table[idx]==null){
 			table[idx] = new MyAVLTree();
 		}
-		table[indexCalculator(input.getStr())].insert(input);
+		table[idx].insert(input);
 		
 	}
 	
@@ -34,5 +34,8 @@ public class MyHashTable {
 		table[idx].preorderPrint();
 	}
 	
+	public MyAVLTree getValue(String input){
+		return table[hashFunction(input)];
+	}
 
 }

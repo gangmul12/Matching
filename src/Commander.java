@@ -68,7 +68,13 @@ public class Commander {
 		for(int i = 1; i<=numOfJointStr;i++){
 			strSet[i+numOfDisjointStr-1] = cmdData.substring(6*(numOfDisjointStr-1)+i, 6*(numOfDisjointStr)+i);
 		}
-		
+		if(ht.getValue(strSet[0])==null||ht.getValue(strSet[0]).retrieve(strSet[0])==null||ht.getValue(strSet[0]).retrieve(strSet[0]).getList().size()==0){
+			System.out.println("(0, 0)");
+			return;
+		}
+		int numOfCand = ht.getValue(strSet[0]).retrieve(strSet[0]).getList().size();	
+		coordinate[] cordSet = new coordinate[numOfCand];
+		boolean [] boolSet = new boolean[numOfCand];
 		
 		
 	}
