@@ -40,11 +40,19 @@ class AVLNode implements Comparable<AVLNode>{
 	}
 	public void setLeft(AVLNode obj){
 		lChild = obj;
-		
+		if(obj==null){
+			leftHeight = 0;
+			return;
+		}
+		leftHeight = (obj.leftHeight>obj.rightHeight)? obj.leftHeight+1:obj.rightHeight+1;
 	}
 	public void setRight(AVLNode obj){
 		rChild = obj;
-		
+		if(obj==null){
+			rightHeight = 0;
+			return;
+		}
+		rightHeight = (obj.leftHeight>obj.rightHeight)? obj.leftHeight+1:obj.rightHeight+1;
 	}
 	public void set(int dir, AVLNode obj){
 		if(dir%2==0)
@@ -77,6 +85,7 @@ public class MyAVLTree{
 	final int LEFT = 0;
 	final int RIGHT = 1;
 	
+	
 	private AVLNode root;
 	
 	public AVLNode getRoot(){
@@ -87,71 +96,17 @@ public class MyAVLTree{
 		root = null;
 	}
 	public void insert(inputQuery obj){
-		MyLinkedList<Integer> record = new MyLinkedList<Integer>();
+		MyLinkedList<Integer> record = new MyLinkedList<Integer>(-1);
 		boolean efInsert = (retrieve(obj.getStr())==null);
 		root = insertItem(obj, root, record);
 		if(efInsert){
-			fixH8();
-			//rebalance(record);
+			//fixHeight(record);
+			rebalance(record.getFirst());
 		}
 		
 		
 	}
-	
-	private void rebalance(MyLinkedList<Integer> record){
-		AVLNode curNode = root;
-		LLNode<Integer> curLLNode = record.getHead().getNext();
-		boolean needTrack = false;  //do we need to rebalance?
-		for(int i = 0 ; i < record.size(); i++){
-			if(needBalance(curNode)){
-				needTrack = true;
-				break;
-			}
-			curNode = curNode.get(curLLNode.getItem());
-			curLLNode = curLLNode.getNext();
-		}
-		
-		if(needTrack == false) // if we don't need to rebalance
-			return;
-		//if we need to rotate root
-		if(curNode==root&&!needBalance(curNode.get(curLLNode.getItem()))&&needBalance(root)){
-			if(needDbRotation(root, curLLNode.getItem()))
-				root.set(curLLNode.getItem(), rotation(root.get(curLLNode.getItem()), curLLNode.getItem()));
-			root = rotation(root, curLLNode.getItem()+1);
-			return;
-		}
-		//else
-		while(true){
-			int dir = curLLNode.getItem();
-			int nextDir = curLLNode.getNext().getItem();
-			if(needBalance(curNode.get(dir).get(nextDir))){
-				curNode = curNode.get(dir);
-				curLLNode = curLLNode.getNext();
-				continue;
-			}
-			else{
-				if(needDbRotation(curNode.get(dir), nextDir))
-					curNode.get(dir).set(nextDir, rotation(curNode.get(dir).get(nextDir), nextDir));
-				curNode.set(dir, rotation(curNode.get(dir), dir));
-			}			
-		}
-	}
-	
-	
-	
-	private boolean needDbRotation(AVLNode aNode2, int dir){
-		AVLNode rootNode = aNode2.get(dir);
-		if(rootNode.heightOf(dir)<rootNode.heightOf(dir+1))
-			return true;
-		return false;
-		
-	}
-	private boolean needBalance(AVLNode aNode){
-		if(aNode==null)
-			return false;
-		return ((aNode.leftHeight-aNode.rightHeight)==2||(aNode.rightHeight-aNode.leftHeight)==2);
-	}
-	
+
 	private AVLNode insertItem(inputQuery obj, AVLNode aNode, MyLinkedList<Integer> record){
 		if(aNode==null){
 			aNode = new AVLNode(obj.getStr());
@@ -172,14 +127,64 @@ public class MyAVLTree{
 		
 	}
 	
+
+	
+	private void rebalance(LLNode<Integer> dirNode){
+		root = balance(root, dirNode);
+	}
+	
+	private AVLNode balance(AVLNode aNode, LLNode<Integer> dirNode){
+		if(dirNode.getItem()==-1) return aNode;
+		else{
+			int dir = dirNode.getItem();
+			if(!needBalance(aNode)){
+				aNode.set(dir, balance(aNode.get(dir), dirNode.getNext()));
+			}
+		
+			else{
+				
+				if(needBalance(aNode.get(dir))){
+					aNode.set(dir, balance(aNode.get(dir), dirNode.getNext()));
+				}
+				else{
+					aNode = fixRotation(aNode, dirNode);
+				}	
+			}
+		}
+		return aNode;
+		
+	}
+	
+	private AVLNode fixRotation(AVLNode aNode, LLNode<Integer> dirNode){
+		int dir = dirNode.getItem();
+		
+		if(needDbRotation(aNode, dir)){
+			aNode.set(dir, rotation(aNode.get(dir), dir));
+		}
+		return rotation(aNode, dir+1);
+		
+	}
+	
+
+	private boolean needDbRotation(AVLNode aNode2, int dir){
+		AVLNode rootNode = aNode2.get(dir);
+		if(rootNode.heightOf(dir)<rootNode.heightOf(dir+1))
+			return true;
+		return false;
+		
+	}
+	private boolean needBalance(AVLNode aNode){
+		if(aNode==null)
+			return false;
+		return ((aNode.leftHeight-aNode.rightHeight)==2||(aNode.rightHeight-aNode.leftHeight)==2);
+	}
+	
 	private AVLNode rotation(AVLNode aNode, int dir){
 		AVLNode newRoot;
 		newRoot = aNode.get(dir+1);
 		AVLNode temp = newRoot.get(dir);
-		newRoot.set(dir,aNode);
 		aNode.set(dir+1, temp);
-		
-		fixH8();
+		newRoot.set(dir,aNode);
 		
 		return newRoot;		
 	}
@@ -199,7 +204,7 @@ public class MyAVLTree{
 		}
 	}
 	
-	
+	/*
 	private void fixH8(){
 		root.leftHeight = fixH8recur(root.getLeft());
 		root.rightHeight = fixH8recur(root.getRight());
@@ -212,7 +217,7 @@ public class MyAVLTree{
 		return (aNode.leftHeight>aNode.rightHeight)? aNode.leftHeight:aNode.rightHeight;
 	}
 	
-	private void fixHeight(/*MyLinkedList<Integer> record*/){
+	private void fixHeight(){
 		
 		
 		
@@ -234,8 +239,8 @@ public class MyAVLTree{
 			currentNode = (currentLLNode.getItem()==LEFT)?currentNode.getLeft() : currentNode.getRight();
 			currentLLNode=currentLLNode.getNext();
 			
-		}*/
-	}
+		}
+	}*/
 	
 	public void delete(){
 		
