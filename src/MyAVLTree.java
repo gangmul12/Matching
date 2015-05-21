@@ -1,4 +1,6 @@
-
+//****************************************************
+// AVL Node의 class
+//****************************************************
 class AVLNode implements Comparable<AVLNode>{
 	
 	
@@ -76,6 +78,9 @@ class AVLNode implements Comparable<AVLNode>{
 		
 }
 
+//****************************************************
+//AVL Tree의 class
+//****************************************************
 
 public class MyAVLTree{
 	final int LEFT = 0;
@@ -205,6 +210,8 @@ public class MyAVLTree{
 		
 	}
 	
+	
+	//iterator를 따로 구현하진 않았다.
 	public void preorderPrint(){
 		preorder(root);
 	}

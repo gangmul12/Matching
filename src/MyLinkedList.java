@@ -32,8 +32,9 @@ class LLNode<T>{
 		return prev;
 	}
 }
-
-//TODO implement ordered LinkedList with dummy head node
+// ********************************************************************
+// Linked List 구현
+// ********************************************************************
 public class MyLinkedList<T extends Comparable<T>>{
 	private int size;
 	private LLNode<T> head;
@@ -55,20 +56,26 @@ public class MyLinkedList<T extends Comparable<T>>{
 	public boolean isEmpty(){
 		return (size==0);
 	}
-	
-	public LLNode<T> getHead(){
-		return head;
+	public int size(){
+		return size;
 	}
+	public LLNode<T> get(int idx){
+		return null;// index의 값을 가져오는 함수. 첫 item만 가져오면 돼서 구현 안함
+	}
+	
 	public LLNode<T> getFirst(){
 		return head.getNext();
 	}
-	
-	
-	public void add(T obj){
-		//T obj를  정렬된 순서로 넣는 함수. 구현에 필요하지 않아 대신 리스트 가장 뒤에 집어넣는 insertBack을 구현했다.
+	public void removeAll(){
+		head = null;
+		size = 0;
 	}
 	
-	public void delete(T obj){
+	public void add(int index, T obj){
+		//T obj를  index에 넣는 함수. 구현에 필요하지 않아 대신 리스트 가장 뒤에 집어넣는 insertBack을 구현했다.
+	}
+	
+	public void remove(T obj){
 		//T obj를 가진 node를 없애는 함수. 구현에 필요하지 않아 대신 리스트 가장 첫 원소를 없애는 deleteFirst를 구현했다.
 	}
 	
@@ -98,8 +105,6 @@ public class MyLinkedList<T extends Comparable<T>>{
 		
 	}
 	
-	public int size(){
-		return size;
-	}
+	
 
 }
