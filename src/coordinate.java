@@ -1,4 +1,6 @@
-
+//===========================================================
+// 좌표class coordinate의 구현
+//===========================================================
 class coordinate implements Comparable<coordinate>{
 	private int line;
 	private int index;

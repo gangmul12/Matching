@@ -91,6 +91,7 @@ public class MyAVLTree{
 	public MyAVLTree(){
 		root = null;
 	}
+	
 	public void insert(inputQuery obj){
 		MyLinkedList<Integer> record = new MyLinkedList<Integer>(-1);
 		boolean efInsert = (retrieve(obj.getStr())==null);
@@ -200,6 +201,7 @@ public class MyAVLTree{
 	}
 	
 	public void delete(){
+		//이번 과제에 필요하지 않아 구현하지 않음
 		
 	}
 	
@@ -207,6 +209,13 @@ public class MyAVLTree{
 		preorder(root);
 	}
 	
+	public void inorderPrint(){
+		//과제에 필요하지 않아 구현하지 않음
+	}
+	
+	public void postorderPrint(){
+		//과제에 필요하지 않아 구현하지 않음
+	}
 	public void preorder(AVLNode aNode){
 		if(aNode!=null){
 			System.out.print(aNode.getStr()+" ");
