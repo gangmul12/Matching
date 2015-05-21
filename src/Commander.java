@@ -72,10 +72,46 @@ public class Commander {
 			System.out.println("(0, 0)");
 			return;
 		}
-		int numOfCand = ht.getValue(strSet[0]).retrieve(strSet[0]).getList().size();	
-		coordinate[] cordSet = new coordinate[numOfCand];
-		boolean [] boolSet = new boolean[numOfCand];
+		MyLinkedList<coordinate> firstStrLL = ht.getValue(strSet[0]).retrieve(strSet[0]).getList();
 		
+		int numOfCand = firstStrLL.size();	
+		coordinate[] cordSet = new coordinate[numOfCand];
+		LLNode<coordinate> curNode = firstStrLL.getFirst();
+		for(int i = 0 ; i < numOfCand ; i++){
+			cordSet[i] = new coordinate(curNode.getItem());
+			curNode = curNode.getNext();
+		}
+		
+		boolean [] boolSet = new boolean[numOfCand];
+		for(int i = 0 ; i < numOfCand ; i++)
+			boolSet[i]=true;
+		for(int j = 0 ; j < numOfCand ; j++){
+			for(int i = 1; i < totNum; i++){
+				if(boolSet[j]!=false){
+					if((ht.getValue(strSet[i])==null)||(ht.getValue(strSet[i]).retrieve(strSet[i])==null)||(ht.getValue(strSet[i]).retrieve(strSet[i]).getList()==null))
+						boolSet[j]=false;
+					MyLinkedList<coordinate> m = ht.getValue(strSet[i]).retrieve(strSet[i]).getList();
+					
+					if(i<numOfDisjointStr&&m.search(new coordinate(cordSet[j].getLine(), cordSet[j].getIndex()+6*i))==null)
+						boolSet[j]=false;
+					if(i>=numOfDisjointStr&&m.search(new coordinate(cordSet[j].getLine(), cordSet[j].getIndex()+6*(numOfDisjointStr-1)+i-1))==null)
+						boolSet[j]=false;
+				}
+			
+			}
+		}
+		boolean match = false;
+		for(int i = 0 ; i < numOfCand ; i++){
+			if(boolSet[i]==true){
+				match = true;
+				System.out.print(cordSet[i].toString() + " ");
+			}
+			
+		}
+		if(!match){
+			System.out.print("(0, 0)");
+		}
+		System.out.println();
 		
 	}
 	private void print(MyHashTable ht) throws IOException{

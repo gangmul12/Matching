@@ -85,6 +85,18 @@ public class MyLinkedList<T extends Comparable<T>> implements Iterable<T>{
 		size++;
 		
 	}
+	
+	public LLNode<T> search(T obj){
+		LLNode<T> curNode = this.getFirst();
+		for(int i = 0 ; i < this.size; i++){
+			if(curNode.getItem().equals(obj))
+				return curNode;
+			curNode = curNode.getNext();
+		}
+		return null;
+		
+	}
+	
 	public int size(){
 		return size;
 	}

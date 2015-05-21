@@ -7,6 +7,10 @@ class coordinate implements Comparable<coordinate>{
 		this.line = nthline;
 		this.index = nthindex;
 	}
+	public coordinate(coordinate other){
+		this.line = other.getLine();
+		this.index = other.getIndex();
+	}
 	
 	public int getLine(){
 		return line;
