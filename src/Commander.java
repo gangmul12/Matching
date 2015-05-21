@@ -101,12 +101,22 @@ public class Commander {
 			}
 		}
 		boolean match = false;
+		MyLinkedList<coordinate> result = new MyLinkedList<coordinate>(new coordinate(-1,-1));
 		for(int i = 0 ; i < numOfCand ; i++){
 			if(boolSet[i]==true){
 				match = true;
-				System.out.print(cordSet[i].toString() + " ");
+				result.insertBack(cordSet[i]);
 			}
 			
+		}
+		curNode = result.getFirst();
+		for(int i = 0 ; i < result.size(); i++){
+			if(i==result.size()-1){
+				System.out.print(curNode.getItem().toString());
+			}
+			else
+				System.out.print(curNode.getItem().toString()+" ");
+			curNode=curNode.getNext();
 		}
 		if(!match){
 			System.out.print("(0, 0)");
